@@ -35,7 +35,10 @@ app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/about", express.static(path.join(__dirname, "public")));
 
 // use router according to following paths
+//routers are custom middleware cause they are routing request to the controllers which then send a res
 app.use("/", require("./routes/root"));
+app.use("/users", require("./routes/userRoutes"));
+//
 app.use("/about", require("./routes/about"));
 
 //use this middleware/route for other routes

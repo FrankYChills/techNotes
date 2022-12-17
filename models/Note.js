@@ -10,7 +10,7 @@ const noteSchema = new mongoose.Schema(
     completed: { type: Boolean, default: false },
   },
   {
-    //mongodb will auto create two columns createdAt and updatedAt if this set to true
+    //mongodb will auto create two columns createdAt and updatedAt if this is set to true
     timestamps: true,
   }
 );
@@ -22,5 +22,6 @@ noteSchema.plugin(AutoIncrement, {
   id: "ticketNums",
   start_seq: 500,
 });
-// export a Model/table/collection
+// create and export a Model/table/collection(here User collection with its schema) on to a database connected to mongoose
+
 module.exports = mongoose.model("Note", noteSchema);

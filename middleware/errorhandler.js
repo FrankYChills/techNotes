@@ -1,5 +1,6 @@
 const { logEvents } = require("./logger");
 
+//whenever thers an error in the server this gets called
 const errorHandler = (err, req, res, next) => {
   logEvents(
     `${err.name}: ${err.message}\t${req.method}\t${req.url}\t${req.headers.origin}`,
