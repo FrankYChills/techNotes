@@ -16,8 +16,17 @@ const getAllNotes = asyncHandler(async (req, res) => {
       message: "No Notes Found",
     });
   }
+  // add the username column to each note using userId in response
+  const notesWithUsername = await Promise.all(
+    notes.map(async (note) => {
+      // find the user assigned to each note
+      const user = await User.findById(note.user).lean().exec();
+      // add username field to current note
+      return { ...note, username: user.username };
+    })
+  );
   //   send json res of notes array
-  res.json(notes);
+  res.json(notesWithUsername);
 });
 
 // Post a Note (create)
@@ -35,6 +44,13 @@ const createNewNote = asyncHandler(async (req, res) => {
   if (!person) {
     return res.status(400).json({ message: "User isn't found" });
   }
+
+  // check for duplicate title
+  const duplicate = await Note.findOne({ title }).lean().exec();
+  if (duplicate) {
+    return res.status(409).json({ message: "Duplicate note title" });
+  }
+
   const noteObject = { user, title, text };
 
   // create and store note

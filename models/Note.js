@@ -17,9 +17,9 @@ const noteSchema = new mongoose.Schema(
   }
 );
 //apply auto increment as a plugin to schema
-// this creates a new collection as counter with id as ticketNums and auto increments it
+// this creates a new collection as counter with id as ticketNums and it will have a seq attribute that will be same as last note's ticket value.
 // ticket number will be auto incremented as new note gets added
-// also it creates a new ticket column in noteSchema and increments it according to counter's id
+// also it creates a new ticket column in noteSchema and increments it according to counter's seq
 noteSchema.plugin(AutoIncrement, {
   inc_field: "ticket",
   id: "ticketNums",
