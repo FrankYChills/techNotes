@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// create a schema/table
 const userSchema = new mongoose.Schema({
   // _id column with unique values is created by default
   username: { type: String, required: true },

@@ -16,6 +16,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
   if (!users?.length) {
     return res.status(400).json({ message: "No Users Found" });
   }
+  // convert res to json
   res.json(users);
 });
 
@@ -51,9 +52,9 @@ const createNewUser = asyncHandler(async (req, res) => {
   }
 });
 
-// PUT a user(update)
+// PATCH a user(update)
 const updateUser = asyncHandler(async (req, res) => {
-  //get the data from the url or request body
+  //get the data from the url or request body (id is necessary)
   const { id, username, roles, active, password } = req.body;
 
   // validate
@@ -62,7 +63,7 @@ const updateUser = asyncHandler(async (req, res) => {
     !username ||
     !Array.isArray(roles) ||
     !roles.length ||
-    typeof active != boolean
+    typeof active != "boolean"
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }

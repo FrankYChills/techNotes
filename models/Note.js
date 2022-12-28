@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
+
+// create a schema/table
 const noteSchema = new mongoose.Schema(
   {
     // each note will have a refrence to user
@@ -16,6 +18,7 @@ const noteSchema = new mongoose.Schema(
 );
 //apply auto increment as a plugin to schema
 // this creates a new collection as counter with id as ticketNums and auto increments it
+// ticket number will be auto incremented as new note gets added
 // also it creates a new ticket column in noteSchema and increments it according to counter's id
 noteSchema.plugin(AutoIncrement, {
   inc_field: "ticket",
