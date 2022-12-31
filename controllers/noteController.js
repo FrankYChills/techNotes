@@ -117,7 +117,7 @@ const deleteNote = asyncHandler(async (req, res) => {
   if (!note.completed) {
     return res
       .status(400)
-      .json({ message: "Can't delete that isn't completed" });
+      .json({ message: "Can't delete a note that isn't completed" });
   }
   //   delete note
   const result = await note.deleteOne();

@@ -47,7 +47,11 @@ app.use("/about", express.static(path.join(__dirname, "public")));
 //routers are custom middleware cause they are routing request to the controllers which then send a res
 app.use("/", require("./routes/root"));
 
+// auth route
+app.use("/auth", require("./routes/authRoutes"));
+// users route
 app.use("/users", require("./routes/userRoutes"));
+// notes route
 app.use("/notes", require("./routes/noteRoutes"));
 //
 app.use("/about", require("./routes/about"));
