@@ -13,7 +13,9 @@ const login = asyncHandler(async (req, res) => {
 
   const foundUser = await User.findOne({ username }).exec();
   if (!foundUser || !foundUser.active) {
-    return res.status(400).json({ message: "Unauthorized User" });
+    return res
+      .status(400)
+      .json({ message: "User doesn't Exists | Unauthorized User" });
   }
 
   const match = await bcrypt.compare(password, foundUser.password);
@@ -26,13 +28,13 @@ const login = asyncHandler(async (req, res) => {
   // access token help client to access protected routes or to authorize user
   const accessToken = jwt.sign(
     {
-      UserInfo: {
+      userInfo: {
         username: foundUser.username,
         roles: foundUser.roles,
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "10s" }
+    { expiresIn: "5m" }
   );
 
   //   refresh token helps client to have a new access token when old one expires
@@ -42,6 +44,7 @@ const login = asyncHandler(async (req, res) => {
     { expiresIn: "1d" }
   );
 
+  // send refresh token as a coookie
   // create a secure cookie with refresh token and send it to user with name as jwt
   res.cookie("jwt", refreshToken, {
     httpOnly: true, //accessible only by web server
@@ -58,7 +61,7 @@ const login = asyncHandler(async (req, res) => {
 const refresh = (req, res) => {
   // check for cookies in the request
   const cookies = req.cookies;
-
+  console.log(cookies);
   //   check if client has a refresh token named as jwt
   if (!cookies?.jwt) {
     return res
@@ -91,13 +94,13 @@ const refresh = (req, res) => {
       // create a new access token and send it to the user
       const accessToken = jwt.sign(
         {
-          UserInfo: {
+          userInfo: {
             username: foundUser.username,
             roles: foundUser.roles,
           },
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "10s" }
+        { expiresIn: "5m" }
       );
 
       res.json({ accessToken });
@@ -115,7 +118,7 @@ const logout = (req, res) => {
     return res.sendStatus(204); //No Content
   }
 
-  // clear cookie
+  // clear cookie from user's app
   res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
   res.json({ message: "Cookie cleared" });
 };

@@ -36,7 +36,7 @@ app.use(logger);
 // custom middleware
 app.use(express.json());
 
-// app.use(cookieParser);
+app.use(cookieParser());
 
 // tell express to use static files(in views directory)
 app.use("/", express.static(path.join(__dirname, "public")));
