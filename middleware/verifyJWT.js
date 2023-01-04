@@ -19,11 +19,9 @@ const verifyJWT = (req, res, next) => {
   // verify the access token
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
-      return res
-        .status(403)
-        .json({
-          message: "Wrong Access Token by Client or Token Expired | Forbidden",
-        });
+      return res.status(403).json({
+        message: "Wrong Access Token by Client or Token Expired | Forbidden",
+      });
     }
     // as access token has a userInfo attribute
     req.user = decoded.userInfo.username;

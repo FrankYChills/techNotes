@@ -61,11 +61,11 @@ const login = asyncHandler(async (req, res) => {
 const refresh = (req, res) => {
   // check for cookies in the request
   const cookies = req.cookies;
-  console.log(cookies);
+
   //   check if client has a refresh token named as jwt
   if (!cookies?.jwt) {
     return res
-      .status(201)
+      .status(401)
       .json({ message: "Client doesn't have a refresh token" });
   }
 
