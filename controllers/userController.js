@@ -26,12 +26,16 @@ const createNewUser = asyncHandler(async (req, res) => {
   const { username, password, roles } = req.body;
 
   // validate
-  if (!username || !password || !Array.isArray(roles) || !roles.length) {
+  if (!username || !password) {
     // returning here ...
     return res.status(400).json({ message: "All fields are required" });
   }
   // check for duplicate user
-  const duplicate = await User.findOne({ username }).lean().exec();
+  // Case check here is insensitive meaning dave will be same as Dave or DAVE etc.
+  const duplicate = await User.findOne({ username })
+    .collation({ locale: "en", strength: 2 })
+    .lean()
+    .exec();
   if (duplicate) {
     // returning here...
     return res.status(409).json({ message: "This name is not available" });
@@ -40,7 +44,10 @@ const createNewUser = asyncHandler(async (req, res) => {
   // hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const userObject = { username, password: hashedPassword, roles };
+  const userObject =
+    !Array.isArray(roles) || !roles.length
+      ? { username, password: hashedPassword }
+      : { username, password: hashedPassword, roles };
 
   // create and store new user
   const user = await User.create(userObject);
@@ -75,7 +82,10 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 
   // check for duplicate
-  const duplicate = await User.findOne({ username }).lean().exec();
+  const duplicate = await User.findOne({ username })
+    .collation({ locale: "en", strength: 2 })
+    .lean()
+    .exec();
   // allow updates to the original user
 
   // if a user is found with the username as passed username but with different id than passed id that means its a duplicate user
