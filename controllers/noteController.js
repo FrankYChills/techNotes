@@ -87,12 +87,9 @@ const updateNote = asyncHandler(async (req, res) => {
   }
   if (title) {
     // check for duplicate title
-    const duplicate = await Note.findOne({ title })
-      .collation({ locale: "en", strength: 2 })
-      .lean()
-      .exec();
+    const duplicate = await Note.findOne({ title });
     // in case we don't want to update the title, the title we receive will be the duplicate we get.So we can check for other duplicate via
-    if (duplicate && duplicate?.id.toString() !== id) {
+    if (duplicate && duplicate?.id?.toString() !== id) {
       // theres a duplicate
       return res.status(409).json({ message: "Duplicate note title" });
     }
