@@ -1,7 +1,4 @@
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://www.dandrepairshop.com",
-  "https://dandrepairshop.com",
-];
+// frontend app address to access our backend
+const allowedOrigins = ["https://technotes-services.onrender.com"];
 
 module.exports = allowedOrigins;
